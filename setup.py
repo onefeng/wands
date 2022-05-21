@@ -14,7 +14,7 @@ from setuptools import find_packages, setup, Command
 # Package meta-data.
 NAME = 'wands-ce'
 DESCRIPTION = ''
-URL = 'https://github.com/onefeng/kevin'
+URL = 'https://github.com/onefeng/wands'
 EMAIL = '15198086902@163.com'
 AUTHOR = 'onefeng'
 REQUIRES_PYTHON = '>=3'
