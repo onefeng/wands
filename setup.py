@@ -12,13 +12,13 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'wands'
+NAME = 'wands-ce'
 DESCRIPTION = ''
 URL = 'https://github.com/onefeng/kevin'
 EMAIL = '15198086902@163.com'
 AUTHOR = 'onefeng'
 REQUIRES_PYTHON = '>=3'
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
