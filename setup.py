@@ -11,6 +11,17 @@ from shutil import rmtree
 
 from setuptools import find_packages, setup, Command
 
+
+def read_file(filename):
+    with open(filename) as fp:
+        return fp.read().strip()
+
+
+def read_requirements(filename):
+    return [line.strip() for line in read_file(filename).splitlines()
+            if not line.startswith('#')]
+
+
 # Package meta-data.
 NAME = 'wands-ce'
 DESCRIPTION = ''
@@ -18,12 +29,10 @@ URL = 'https://github.com/onefeng/wands'
 EMAIL = '15198086902@163.com'
 AUTHOR = 'onefeng'
 REQUIRES_PYTHON = '>=3'
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 
 # What packages are required for this module to be executed?
-REQUIRED = [
-    # 'requests', 'maya', 'records',
-]
+REQUIRED = read_requirements('requirements.txt')
 
 # What packages are optional?
 EXTRAS = {
@@ -129,9 +138,9 @@ setup(
     cmdclass={
         'upload': UploadCommand,
     },
-    # entry_points={
-    #     'console_scripts': [
-    #         'wands=wands:main',
-    #     ],
-    # },
+    entry_points={
+        'console_scripts': [
+            'wands = wands.cmd:cmd',
+        ],
+    },
 )
