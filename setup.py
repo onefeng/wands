@@ -29,7 +29,7 @@ URL = 'https://github.com/onefeng/wands'
 EMAIL = '15198086902@163.com'
 AUTHOR = 'onefeng'
 REQUIRES_PYTHON = '>=3'
-VERSION = '1.0.2'
+VERSION = '1.0.3'
 
 # What packages are required for this module to be executed?
 REQUIRED = read_requirements('requirements.txt')
