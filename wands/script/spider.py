@@ -5,11 +5,13 @@
 @time: 2022/5/24 10:15
 """
 import re
-
+import csv
 from urllib.parse import urljoin
 
 import requests
 from pyquery import PyQuery as pq
+
+from wands.script import AREA_MAP
 
 
 class AreaSpider:
@@ -46,6 +48,7 @@ class AreaSpider:
 
     @staticmethod
     def retry_response(url):
+        """重试请求"""
         n = 0
         while n < 5:
             try:
@@ -61,6 +64,7 @@ class AreaSpider:
         province, city, county, town, village = self.set_level(doc)
         detail = self.parse_detail(response)
         for data in detail:
+            self.write_csv(data)
             print(data)
             # yield data
         items = []
@@ -100,55 +104,65 @@ class AreaSpider:
             for item in items:
                 data = dict()
                 pattern = re.compile(r'\d{2}', re.S)
-                data['name'] = item.text()
+
                 area_id = re.search(pattern, item.attr('href'))
                 if area_id:
                     data['id'] = area_id.group(0)
-                data['parent_id'] = '0'
+                data['name'] = item.text()
                 data['area_level'] = '1'
+                data['alias'] = AREA_MAP.get(data['id'])
+                data['parent_id'] = '0'
+
                 yield data
         elif city:
             items = city.items()
             for item in items:
                 data = dict()
-                id = item('td:eq(0)').text()
+                data['id'] = item('td:eq(0)').text()[0:4]
                 data['name'] = item('td:eq(1)').text()
-                data['id'] = id[0:4]
-                data['parent_id'] = parent_id
                 data['area_level'] = '2'
+                data['alias'] = AREA_MAP.get(data['id'])
+                data['parent_id'] = parent_id
                 yield data
         elif county:
             items = county.items()
             for item in items:
                 data = dict()
-                id = item('td:eq(0)').text()
+                data['id'] = item('td:eq(0)').text()[0:6]
                 data['name'] = item('td:eq(1)').text()
-                data['id'] = id[0:6]
-                data['parent_id'] = parent_id
                 data['area_level'] = '3'
+                data['alias'] = AREA_MAP.get(data['id'])
+                data['parent_id'] = parent_id
                 yield data
         elif town:
             items = town.items()
             for item in items:
                 data = dict()
-                id = item('td:eq(0)').text()
+                data['id'] = item('td:eq(0)').text()[0:9]
                 data['name'] = item('td:eq(1)').text()
-                data['id'] = id[0:9]
-                data['parent_id'] = parent_id
                 data['area_level'] = '4'
+                data['alias'] = data['name']
+                data['parent_id'] = parent_id
                 yield data
         elif village:
             items = village.items()
             for item in items:
                 data = dict()
-                id = item('td:eq(0)').text()
+                data['id'] = item('td:eq(0)').text()
                 data['name'] = item('td:eq(2)').text()
-                data['id'] = id
-                data['parent_id'] = parent_id
                 data['area_level'] = '5'
+                data['alias'] = data['name']
+                data['parent_id'] = parent_id
                 yield data
+
+    @staticmethod
+    def write_csv(result):
+        path = 'area_base.csv'
+        with open(path, 'a', encoding='utf-8', newline='') as f:
+            w = csv.writer(f)
+            w.writerow(result.values())
 
 
 if __name__ == '__main__':
-    s = AreaSpider(3, 2020)
+    s = AreaSpider()
     s.start_request()
