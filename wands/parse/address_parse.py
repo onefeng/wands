@@ -19,11 +19,11 @@ class AddressParse:
         self.city_list = []
         self.county_list = []
         for item in self.map_list:
-            if item['class_code'] == '1':
+            if item['area_level'] == '1':
                 self.province_list.append(item)
-            if item['class_code'] == '2':
+            if item['area_level'] == '2':
                 self.city_list.append(item)
-            if item['class_code'] == '3':
+            if item['area_level'] == '3':
                 self.county_list.append(item)
 
     def get_candidates(self, address_text):
@@ -49,9 +49,9 @@ class AddressParse:
             if item["id"] == parent:
                 data['id'] = item['id']
                 data['name'] = item['name']
-                data['class_code'] = item['class_code']
+                data['area_level'] = item['area_level']
                 self.result_list.append(data)
-                self.generate_tree(source, item["parent"])
+                self.generate_tree(source, item["parent_id"])
 
     def __call__(self, address_text):
         if self.map_list is None:
@@ -71,17 +71,17 @@ class AddressParse:
         candidate = candidates[0]
         self.result_list = []
 
-        self.generate_tree(self.map_list, candidate['parent'])
+        self.generate_tree(self.map_list, candidate['parent_id'])
         self.result_list.append(candidate)
 
         for item in self.result_list:
-            if item['class_code'] == '3':
+            if item['area_level'] == '3':
                 result['county'] = item['name']
                 result['county_id'] = item['id']
-            if item['class_code'] == '2':
+            if item['area_level'] == '2':
                 result['city'] = item['name']
                 result['city_id'] = item['id']
-            if item['class_code'] == '1':
+            if item['area_level'] == '1':
                 result['province'] = item['name']
                 result['province_id'] = item['id']
 
