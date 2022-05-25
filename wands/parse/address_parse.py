@@ -30,16 +30,16 @@ class AddressParse:
         """获取候选地址"""
         candidates = []
         for item in self.county_list:
-            if item['name'] in address_text:
+            if item['name'] in address_text or item['alias'] in address_text:
                 candidates.append(item)
 
         if not candidates:
             for item in self.city_list:
-                if item['name'] in address_text:
+                if item['name'] in address_text or item['alias'] in address_text:
                     candidates.append(item)
         if not candidates:
             for item in self.province_list:
-                if item['name'] in address_text:
+                if item['name'] in address_text or item['alias'] in address_text:
                     candidates.append(item)
         return candidates
 
@@ -50,6 +50,8 @@ class AddressParse:
                 data['id'] = item['id']
                 data['name'] = item['name']
                 data['area_level'] = item['area_level']
+                data['alias'] = item['alias']
+                data['parent_id'] = item['parent_id']
                 self.result_list.append(data)
                 self.generate_tree(source, item["parent_id"])
 
@@ -68,11 +70,23 @@ class AddressParse:
         candidates = self.get_candidates(address_text)
         if not candidates:
             return result
-        candidate = candidates[0]
-        self.result_list = []
+        score_list = list()
+        for item in candidates:
+            self.result_list = []
 
-        self.generate_tree(self.map_list, candidate['parent_id'])
-        self.result_list.append(candidate)
+            self.generate_tree(self.map_list, item['parent_id'])
+            self.result_list.append(item)
+            score = 0
+
+            for data in self.result_list:
+                if data['name'] in address_text or data['alias'] in address_text:
+                    score += 1
+            score_list.append(score)
+        index_num = score_list.index(max(score_list))
+
+        self.result_list = []
+        self.generate_tree(self.map_list, candidates[index_num]['parent_id'])
+        self.result_list.append(candidates[index_num])
 
         for item in self.result_list:
             if item['area_level'] == '3':
