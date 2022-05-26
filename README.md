@@ -14,3 +14,6 @@ wands runserver --host=0.0.0.0 --port=7689
 
 
 gunicorn -w 4 -b 0.0.0.0:9989 wands.server.manage:app
+
+gunicorn wands.server.manage:app -c ./gunicorn.conf.py --access-logfile -
+
