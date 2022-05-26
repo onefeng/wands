@@ -7,11 +7,7 @@
 
 from wands.server import create_app
 
-
-def manage(host='0.0.0.0', port=9989):
-    app = create_app(__name__)
-    app.run(host, port)
-
+app = create_app(__name__)
 
 if __name__ == "__main__":
-    manage()
+    app.run(host='0.0.0.0', port=9989)
