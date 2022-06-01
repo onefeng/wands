@@ -109,7 +109,7 @@ class AreaSpider:
                 if area_id:
                     data['id'] = area_id.group(0)
                 data['name'] = item.text()
-                data['area_level'] = '1'
+                data['area_level'] = 1
                 data['alias'] = AREA_MAP.get(data['id'])
                 data['parent_id'] = '0'
 
@@ -120,7 +120,7 @@ class AreaSpider:
                 data = dict()
                 data['id'] = item('td:eq(0)').text()[0:4]
                 data['name'] = item('td:eq(1)').text()
-                data['area_level'] = '2'
+                data['area_level'] = 2
                 data['alias'] = AREA_MAP.get(data['id'])
                 data['parent_id'] = parent_id
                 yield data
@@ -130,7 +130,7 @@ class AreaSpider:
                 data = dict()
                 data['id'] = item('td:eq(0)').text()[0:6]
                 data['name'] = item('td:eq(1)').text()
-                data['area_level'] = '3'
+                data['area_level'] = 3
                 data['alias'] = AREA_MAP.get(data['id'])
                 data['parent_id'] = parent_id
                 yield data
@@ -140,7 +140,7 @@ class AreaSpider:
                 data = dict()
                 data['id'] = item('td:eq(0)').text()[0:9]
                 data['name'] = item('td:eq(1)').text()
-                data['area_level'] = '4'
+                data['area_level'] = 4
                 data['alias'] = data['name']
                 data['parent_id'] = parent_id
                 yield data
@@ -150,7 +150,7 @@ class AreaSpider:
                 data = dict()
                 data['id'] = item('td:eq(0)').text()
                 data['name'] = item('td:eq(2)').text()
-                data['area_level'] = '5'
+                data['area_level'] = 5
                 data['alias'] = data['name']
                 data['parent_id'] = parent_id
                 yield data
