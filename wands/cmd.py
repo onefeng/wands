@@ -24,8 +24,8 @@ def cmd():
     args = parser.parse_args()
     command = args.command
     if command == 'runserver':
-        from wands.server.manage import manage
-        manage(args.host, args.port)
+        from wands.server.manage import app
+        app.run(args.host, args.port)
 
 
 if __name__ == '__main__':
