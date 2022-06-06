@@ -4,14 +4,62 @@
 @author: tenkola
 @time: 2022/5/24 10:15
 """
+
 import re
 import csv
+
 from urllib.parse import urljoin
 
 import requests
 from pyquery import PyQuery as pq
 
-from wands.script import AREA_MAP
+province_key = [
+    '特别行政区', '古自治区', '维吾尔自治区', '壮族自治区', '回族自治区', '自治区', '省省直辖', '省', '市'
+]
+
+city_key = [
+    '布依族苗族自治州', '苗族侗族自治州', '藏族羌族自治州', '哈尼族彝族自治州', '壮族苗族自治州', '傣族景颇族自治州', '蒙古族藏族自治州', '傈僳族自治州',
+    '傣族自治州', '白族自治州', '藏族自治州', '彝族自治州', '回族自治州', '蒙古自治州', '朝鲜族自治州', '地区', '哈萨克自治州', '盟', '市'
+]
+
+county_key = [
+    '白族普米族自治县', '哈尼族彝族傣族自治县', '满族自治县', '满族蒙古族自治县', '蒙古族自治县', '朝鲜族自治县',
+    '回族彝族自治县', '彝族回族苗族自治县', '彝族苗族自治县', '土家族苗族自治县', '布依族苗族自治县', '苗族布依族自治县', '苗族土家族自治县',
+    '彝族傣族自治县', '傣族彝族自治县', '仡佬族苗族自治县', '黎族苗族自治县', '苗族侗族自治县', '哈尼族彝族自治县',
+    '彝族哈尼族拉祜族自治县', '傣族拉祜族佤族自治县', '傣族佤族自治县', '拉祜族佤族布朗族傣族自治县', '苗族瑶族傣族自治县', '彝族回族自治县',
+    '独龙族怒族自治县', '保安族东乡族撒拉族自治县', '回族土族自治县', '撒拉族自治县', '哈萨克自治县', '塔吉克自治县', '各族自治县',
+    '回族自治县', '畲族自治县', '土家族自治县', '布依族自治县', '苗族自治县', '壮族瑶族自治县', '瑶族自治县', '侗族自治县', '水族自治县', '傈僳族自治县',
+    '仫佬族自治县', '毛南族自治县', '黎族自治县', '羌族自治县', '彝族自治县', '藏族自治县', '纳西族自治县', '裕固族自治县', '哈萨克族自治县',
+    '哈尼族自治县', '拉祜族自治县', '佤族自治县',
+    '达斡尔族区', '达斡尔族自治旗',
+    '左旗', '右旗', '中旗', '后旗', '联合旗', '自治旗', '旗', '自治县',
+    '街道办事处',
+    '新区', '区', '县', '市'
+]
+
+
+def deal_province_data(data):
+    for key in province_key:
+        data = data.replace(key, '')
+    return data
+
+
+def deal_city_data(data):
+    if len(data) < 3:
+        return data
+    for key in city_key:
+        if data.endswith(key):
+            data = data.replace(key, '')
+    return data
+
+
+def deal_county_data(data):
+    if len(data) < 3:
+        return data
+    for key in county_key:
+        if data.endswith(key):
+            data = data.replace(key, '')
+    return data
 
 
 class AreaSpider:
@@ -106,11 +154,12 @@ class AreaSpider:
                 pattern = re.compile(r'\d{2}', re.S)
 
                 area_id = re.search(pattern, item.attr('href'))
+                name = item.text()
                 if area_id:
                     data['id'] = area_id.group(0)
                 data['name'] = item.text()
                 data['area_level'] = 1
-                data['alias'] = AREA_MAP.get(data['id'])
+                data['alias'] = deal_province_data(data['name'])
                 data['parent_id'] = '0'
 
                 yield data
@@ -121,7 +170,7 @@ class AreaSpider:
                 data['id'] = item('td:eq(0)').text()[0:4]
                 data['name'] = item('td:eq(1)').text()
                 data['area_level'] = 2
-                data['alias'] = AREA_MAP.get(data['id'])
+                data['alias'] = deal_city_data(data['name'])
                 data['parent_id'] = parent_id
                 yield data
         elif county:
@@ -131,7 +180,7 @@ class AreaSpider:
                 data['id'] = item('td:eq(0)').text()[0:6]
                 data['name'] = item('td:eq(1)').text()
                 data['area_level'] = 3
-                data['alias'] = AREA_MAP.get(data['id'])
+                data['alias'] = deal_county_data(data['name'])
                 data['parent_id'] = parent_id
                 yield data
         elif town:
@@ -164,5 +213,5 @@ class AreaSpider:
 
 
 if __name__ == '__main__':
-    s = AreaSpider()
+    s = AreaSpider(level=3, year=2021)
     s.start_request()
