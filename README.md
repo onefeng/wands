@@ -2,7 +2,7 @@
 
 ## 概览
 
-wands项目意为“魔杖”，最初的目的是为了智能解析快递单国内省市区的地址，无需完整地址也能正确匹配，最后返回一个最有可能的结果，本项目的国内地址来源2021年[国家统计局](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2021/index.html) \
+wands项目意为“魔杖”，最初的目的是为了智能解析快递单国内省市区的地址，无需完整地址也能正确匹配，最后返回一个最有可能的结果，本项目的数据来源2021年[国家统计局](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2021/index.html) 。 \
 解析的算法基于树结构搜索和最大匹配概率实现，后面会将其他文本解析功能加入到项目中。\
 为了使不同语言都能调用，这里提供api接口，可部署为单体应用。
 
@@ -12,9 +12,9 @@ wands项目意为“魔杖”，最初的目的是为了智能解析快递单国
 pip install wands-ce
 ```
 
-## 使用
+## 开始使用
 
-1. python调用
+1.python调用
 
 ```python
 import wands
@@ -35,7 +35,7 @@ print(result)
 """
 ```
 
-2. api接口调用
+2.api接口调用
 
 开发环境快速部署命令
 ```shell
