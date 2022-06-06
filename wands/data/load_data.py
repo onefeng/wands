@@ -16,10 +16,10 @@ def load_address():
     csv_reader = csv.reader(open(ADDRESS_PATH, encoding='utf8'))
     for line in csv_reader:
         address_map = dict()
-        address_map['id'] = line[0]
+        address_map['id'] = int(line[0])
         address_map['name'] = line[1]
-        address_map['area_level'] = line[2]
+        address_map['area_level'] = int(line[2])
         address_map['alias'] = line[3]
-        address_map['parent_id'] = line[4]
+        address_map['parent_id'] = int(line[4])
         result.append(address_map)
     return result
