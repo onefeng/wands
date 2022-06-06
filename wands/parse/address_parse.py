@@ -16,7 +16,7 @@ class AddressParse:
 
     def _prepare(self):
         self.map_list = load_address()
-        self.tree = self.generate_tree(self.map_list, '0')
+        self.tree = self.generate_tree(self.map_list, 0)
 
     def generate_tree(self, source, parent):
         tree = []
@@ -159,11 +159,11 @@ class AddressParse:
         result_list = list()
         result = []
         for candidate in candidates:
-            if candidate['area_level'] == '1':
+            if candidate['area_level'] == 1:
                 result = self.parse_address_by_province(candidate, text)
-            if candidate['area_level'] == '2':
+            if candidate['area_level'] == 2:
                 result = self.parse_address_by_city(candidate, text)
-            if candidate['area_level'] == '3':
+            if candidate['area_level'] == 3:
                 result = self.parse_address_by_county(candidate, text)
             result_list.extend(result)
         results = set()
