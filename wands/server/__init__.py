@@ -12,5 +12,6 @@ from .views import register_api
 
 def create_app(name):
     app = Flask(name)
+    app.config["JSON_AS_ASCII"] = False
     register_api(app)
     return app
