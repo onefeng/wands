@@ -27,9 +27,9 @@ print(result)
     'province': '四川省', 
     'city': '绵阳市', 
     'county': '涪城区', 
-    'province_id': '51', 
-    'city_id': '5107', 
-    'county_id': '510703', 
+    'province_id': 51, 
+    'city_id': 5107, 
+    'county_id': 510703, 
     'fit': 0.8999999999999999 # 值越大可信度越高
 }
 """
@@ -42,8 +42,28 @@ print(result)
 wands runserver --host=0.0.0.0 --port=9989
 ```
 
-```shell
-curl http://localhost:9989/address?area=河南郑州中原开封海南
+请求地址:
+
+http://localhost:9989/address?area=山西城区
+
+请求方式：GET
+
+响应示例
+
+```json
+{
+    "code": 200,
+    "data": {
+        "city": "晋城市",
+        "city_id": 1405,
+        "county": "城区",
+        "county_id": 140502,
+        "fit": 1.4,
+        "province": "山西省",
+        "province_id": 14
+    },
+    "message": "success"
+}
 ```
 
 3.docker部署
