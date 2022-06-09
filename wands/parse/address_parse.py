@@ -41,18 +41,6 @@ class AddressParse:
             if result is not None:
                 return result
 
-    def find_tre1e(self, id):
-        """遍历树"""
-        for i in self.tree:
-            if i['id'] == id:
-                return i
-            for j in i['child']:
-                if j['id'] == id:
-                    return j
-                for k in j['child']:
-                    if k['id'] == id:
-                        return k
-
     @staticmethod
     def parse_address_by_province(province, text):
 
