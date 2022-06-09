@@ -33,7 +33,15 @@ class AddressParse:
                 candidates.append(item)
         return candidates
 
-    def find_tree(self, id):
+    def find_tree(self, node, id):
+        for i in node:
+            if i['id'] == id:
+                return i
+            result = self.find_tree(i['child'], id)
+            if result is not None:
+                return result
+
+    def find_tre1e(self, id):
         """遍历树"""
         for i in self.tree:
             if i['id'] == id:
@@ -105,7 +113,7 @@ class AddressParse:
                   'county_fit': 0
                   }
         result_list = list()
-        province = self.find_tree(city['parent_id'])
+        province = self.find_tree(self.tree, city['parent_id'])
         result['province'] = province['name']
         result['province_id'] = province['id']
         if province['name'] in text or province['alias'] in text:
@@ -140,8 +148,8 @@ class AddressParse:
                   'city_fit': 0,
                   'county_fit': 0
                   }
-        city = self.find_tree(county['parent_id'])
-        province = self.find_tree(city['parent_id'])
+        city = self.find_tree(self.tree, county['parent_id'])
+        province = self.find_tree(self.tree, city['parent_id'])
         result['province'] = province['name']
         result['province_id'] = province['id']
         if province['name'] in text or province['alias'] in text:
